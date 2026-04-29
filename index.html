@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; base-uri 'none'"
+    />
+    <title>Street Fighter BR</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main id="app">
+      <section id="title-screen" class="screen title-screen is-active" aria-label="Tela de abertura">
+        <div class="top-bar">
+          <span class="brand">Street Fighter BR</span>
+          <button class="icon-button" data-open-config title="Configurações" aria-label="Configurações">CFG</button>
+        </div>
+        <div class="title-copy">
+          <p class="kicker">Arcade nacional</p>
+          <h1>Street Fighter BR</h1>
+          <p class="subtitle">Cinco regiões. Um cinturão. Um chefão no topo.</p>
+          <div class="title-actions">
+            <button id="start-button" class="primary-button">Jogar</button>
+            <button id="open-roster-button" class="secondary-button">Elenco</button>
+          </div>
+          <p id="load-status" class="load-status">Carregando artes...</p>
+        </div>
+      </section>
+
+      <section id="select-screen" class="screen select-screen" aria-label="Seleção de personagem">
+        <div class="top-bar">
+          <button class="secondary-button compact" data-screen="title-screen">Voltar</button>
+          <span class="brand">Seleção Brasil</span>
+          <button class="icon-button" data-open-config title="Configurações" aria-label="Configurações">CFG</button>
+        </div>
+        <div class="select-layout">
+          <div class="map-panel" aria-label="Mapa do Brasil">
+            <img src="assets/images/ui/brazil-map-select.jpg" alt="" />
+            <div id="map-pins" class="map-pins"></div>
+          </div>
+          <aside class="fighter-panel">
+            <div id="selected-portrait" class="selected-portrait"></div>
+            <p id="selected-region" class="kicker">Região Norte</p>
+            <h2 id="selected-name">Nayara Corrente</h2>
+            <p id="selected-bio" class="fighter-bio"></p>
+            <dl id="selected-moves" class="moves-list"></dl>
+            <button id="fight-button" class="primary-button">Iniciar Arcade</button>
+          </aside>
+        </div>
+        <div id="fighter-grid" class="fighter-grid" aria-label="Lutadores"></div>
+      </section>
+
+      <section id="game-screen" class="screen game-screen" aria-label="Luta">
+        <canvas id="game-canvas" width="1280" height="720"></canvas>
+        <div class="hud">
+          <div class="fighter-hud left">
+            <span id="player-name">Jogador</span>
+            <div class="bar"><span id="player-health"></span></div>
+            <div class="meter"><span id="player-meter"></span></div>
+          </div>
+          <div class="round-info">
+            <span id="stage-name">Arena</span>
+            <strong id="round-timer">90</strong>
+            <span id="round-score" class="round-score">Round 1 | 0 - 0</span>
+          </div>
+          <div class="fighter-hud right">
+            <span id="enemy-name">CPU</span>
+            <div class="bar"><span id="enemy-health"></span></div>
+            <div class="meter"><span id="enemy-meter"></span></div>
+          </div>
+        </div>
+        <div class="game-buttons">
+          <button class="icon-button" data-open-config title="Configurações" aria-label="Configurações">CFG</button>
+          <button class="icon-button" data-screen="select-screen" title="Seleção" aria-label="Seleção">MAP</button>
+        </div>
+        <div class="touch-controls" aria-label="Controles">
+          <button data-hold="left">A</button>
+          <button data-hold="right">D</button>
+          <button data-tap="jump">W</button>
+          <button data-tap="punch">P</button>
+          <button data-tap="kick">K</button>
+          <button data-tap="special">S</button>
+        </div>
+      </section>
+
+      <section id="result-screen" class="screen result-screen" aria-label="Resultado">
+        <div class="result-box">
+          <p id="result-kicker" class="kicker">Vitória</p>
+          <h2 id="result-title">Round vencido</h2>
+          <p id="result-copy"></p>
+          <div id="result-matchup" class="result-matchup" aria-label="Resultado do melhor de 3">
+            <article id="result-left" class="result-combatant">
+              <div class="result-avatar">
+                <span class="result-badge" aria-hidden="true"></span>
+              </div>
+              <strong></strong>
+              <span></span>
+            </article>
+            <article id="result-right" class="result-combatant">
+              <div class="result-avatar">
+                <span class="result-badge" aria-hidden="true"></span>
+              </div>
+              <strong></strong>
+              <span></span>
+            </article>
+          </div>
+          <div class="title-actions">
+            <button id="continue-button" class="primary-button">Continuar</button>
+            <button class="secondary-button" data-screen="select-screen">Seleção</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <dialog id="config-dialog" class="config-dialog">
+      <form method="dialog" class="config-panel">
+        <div class="config-header">
+          <h2>Config</h2>
+          <button class="icon-button" value="close" aria-label="Fechar">X</button>
+        </div>
+        <label>
+          <span>Música</span>
+          <input id="music-volume" type="range" min="0" max="100" value="55" />
+        </label>
+        <label>
+          <span>Efeitos</span>
+          <input id="sfx-volume" type="range" min="0" max="100" value="75" />
+        </label>
+      </form>
+    </dialog>
+
+    <dialog id="roster-dialog" class="roster-dialog">
+      <form method="dialog" class="roster-panel">
+        <div class="config-header">
+          <h2>Elenco</h2>
+          <button class="icon-button" value="close" aria-label="Fechar">X</button>
+        </div>
+        <div id="roster-list" class="roster-list"></div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
